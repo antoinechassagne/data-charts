@@ -6,7 +6,7 @@
 
 const retrieveData = () => {
     try {
-        fetch('datasets/olympics.json')
+        fetch('olympics.json')
             .then(response => response.json())
             .then(data => {
                 chartMap(data);
