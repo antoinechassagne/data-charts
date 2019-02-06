@@ -26,29 +26,26 @@ retrieveData();
 */
 
 const chartMap = (data) => {
-    console.log(data);
-    let medalsPerTeam = [];
+    let medalsPerNoc = [];
 
     for (let i = 0; i < data.length; i++) {
         let line = data[i];
 
-        let team = line.Team;
+        let noc = line.NOC;
         let medals = line.Medal;
 
         if (medals != 'NA') {
-            if (team in medalsPerTeam) {
-                medalsPerTeam[team]++;
+            if (noc in medalsPerNoc) {
+                medalsPerNoc[noc]++;
             } else {
-                medalsPerTeam[team] = 1;
+                medalsPerNoc[noc] = 1;
             }
         }
-
     }
-    console.log(medalsPerTeam);
+
+    console.log(medalsPerNoc);
 
     // @TODO
-    // - Ajouter les NOC au json
-    // - utliser les NOC plutot que les teams
     // - Formater NOC en 2 lettres
     // - CF : https://codepen.io/team/amcharts/pen/jzeoay
 
