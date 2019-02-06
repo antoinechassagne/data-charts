@@ -31,7 +31,7 @@ const chartMap = (data) => {
     for (let i = 0; i < data.length; i++) {
         let line = data[i];
 
-        let noc = line.NOC;
+        let noc = line.NOC.slice(0, -1); // format NOC with 2 characters
         let medals = line.Medal;
 
         if (medals != 'NA') {
@@ -46,7 +46,6 @@ const chartMap = (data) => {
     console.log(medalsPerNoc);
 
     // @TODO
-    // - Formater NOC en 2 lettres
     // - CF : https://codepen.io/team/amcharts/pen/jzeoay
 
 };
