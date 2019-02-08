@@ -67,6 +67,35 @@ const displayMapChart = (data) => {
 
     // @TODO Initialization du chart map
     // @TODO Voir exemple : https://codepen.io/team/amcharts/pen/jzeoay
+    // Create map instance
+    var chart = am4core.create("chartOne", am4maps.MapChart);
+
+    // Set map definition
+    chart.geodata = am4geodata_worldLow;
+
+    // Set projection
+    chart.projection = new am4maps.projections.Miller();
+
+    // Create map polygon series
+    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+    // Make map load polygon (like country names) data from GeoJSON
+    polygonSeries.useGeodata = true;
+
+    // Configure series
+    var polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.tooltipText = "{name}:{value}";
+    polygonTemplate.fill = am4core.color("#E8E8E8");
+
+    // Create hover state and set alternative fill color
+    var hs = polygonTemplate.states.create("hover");
+    hs.properties.fill = am4core.color("blue");
+
+    // Remove Antarctica
+    polygonSeries.exclude = ["AQ"];
+
+    // Add some data
+    polygonSeries.data = formatedData;
 };
 
 /*
