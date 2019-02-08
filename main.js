@@ -10,7 +10,7 @@ const retrieveData = () => {
             .then(response => response.json())
             .then(data => {
                 displayMapChart(data);
-                displayPieChart(data);
+                displayHistChart(data);
                 displayXyChart(data);
             });
     } catch (error) {
@@ -63,7 +63,6 @@ const mapChartData = (data) => {
 // FUNCTION - Display the map chart
 const displayMapChart = (data) => {
     const formatedData = mapChartData(data);
-    console.log(formatedData);
 
     // @TODO Initialization du chart map
     // @TODO Voir exemple : https://codepen.io/team/amcharts/pen/jzeoay
@@ -94,7 +93,7 @@ const displayMapChart = (data) => {
     // Remove Antarctica
     polygonSeries.exclude = ["AQ"];
 
-    // Add some data
+    // Add our medal data
     polygonSeries.data = formatedData;
 };
 
@@ -105,17 +104,64 @@ const displayMapChart = (data) => {
 */
 
 // FUNCTION - Prepare the data for the pie chart
-const pieChartData = (data) => {
+const histChartData = (data) => {
+        let formatedData2 = [];
+        let nbrofage = {};
 
+        for (let i = 0; i < data.length; i++) {
+            let line = data[i];
+            let age = line.Age
+            
+            if (age != 'NA') {
+                if (age in nbrofage) {
+                    nbrofage[age]++;
+                } else {
+                    nbrofage[age] = 1;
+                }
+        }
+    }
+        for (key in nbrofage) {
+            if (nbrofage.hasOwnProperty(key)) {
+                let athleteage = {
+                    category: key,
+                    valueY: nbrofage[key]
+                };
+                formatedData2.push(athleteage);
+            }
+        }
+
+        return formatedData2
+        
 };
 
 // FUNCTION - Display the map chart
-const displayPieChart = (data) => {
-    const formatedData = pieChartData(data);
+const displayHistChart = (data) => {
+    const formatedData2 = histChartData(data);
+
 
     // @TODO Initialization du chart pie
-};
+    // Themes begin
+am4core.useTheme(am4themes_animated);
+am4core.useTheme(am4themes_kelly);
 
+// Create chart instance
+var chart = am4core.create("chartTwo", am4charts.XYChart3D);
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "category";
+categoryAxis.title.text = "Age";
+chart.data = formatedData2;
+var  valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Number of athletes";
+
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries3D());
+series.dataFields.valueY = "valueY";
+series.dataFields.categoryX = "category";
+series.name = "Age of the Olympics atheltes";
+series.tooltipText = "{Category}: [bold]{valueY}[/]";
+// Add cursor
+chart.cursor = new am4charts.XYCursor();
+};
 /*
 * -----------------------------------------------------------------------------
 *  XY CHART
@@ -124,12 +170,61 @@ const displayPieChart = (data) => {
 
 // FUNCTION - Prepare the data for the xy chart
 const xyChartData = (data) => {
+let formatedData3 = [];
+let partbyyear = {};
+
+for (let i = 0; i < data.length; i++) {
+    let line = data[i];
+    let year = line.Year
+
+    if (year != 'NA') {
+        if (year in partbyyear) {
+            partbyyear[year]++;
+        } else {
+            partbyyear[year] = 1;
+        }
+    }
+}
+for (key in partbyyear) {
+    if (partbyyear.hasOwnProperty(key)) {
+        let partyear = {
+            participant: key,
+            valueY: partbyyear[key]
+        };
+        formatedData3.push(partyear);
+    }
+}
+
+return formatedData3
+
 
 };
 
 // FUNCTION - Display the map chart
 const displayXyChart = (data) => {
-    const formatedData = xyChartData(data);
+    const formatedData3 = xyChartData(data);
 
-    // @TODO Initialization du chart xy
+   am4core.useTheme(am4themes_animated);
+
+   // Create chart instance
+   var chart = am4core.create("chartThree", am4charts.XYChart);
+
+    chart.data = formatedData3;
+    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "participant";
+    
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    categoryAxis.dataFields.Value = "valueY";
+
+
+// Create series
+var series1 = chart.series.push(new am4charts.LineSeries());
+series1.dataFields.valueY = "valueY";
+series1.dataFields.categoryX = "participant";
+series1.strokeWidth = 3;
+series1.tensionX = 0.8;
+series1.bullets.push(new am4charts.CircleBullet());
+
+// Add cursor
+chart.cursor = new am4charts.XYCursor();
 };
