@@ -25,10 +25,17 @@
 <section class="charts">
     <div class="container">
         <div class="wrapper">
+
             <div class="element">
                 <h2 class="element__title">
                     Nombre total de médailles olympiques remportées par pays participants
                 </h2>
+                <select class="element__select" id="mapSelect">
+                    <option value="All">Toutes les médailles</option>
+                    <option value="Gold">Or</option>
+                    <option value="Silver">Argent</option>
+                    <option value="Bronze">Bronze</option>
+                </select>
                 <div class="element__chart" id="chartOne"></div>
             </div>
 
@@ -43,6 +50,11 @@
                 <h2 class="element__title">
                     Évolution du nombre total d'athlètes participants aux Jeux Olympiques
                 </h2>
+                <select class="element__select" id="xySelect">
+                    <option value="All">Tous</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Féminin</option>
+                </select>
                 <div class="element__chart" id="chartThree"></div>
             </div>
         </div>

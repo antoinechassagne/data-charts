@@ -13,6 +13,7 @@
                 displayMapChart(data);
                 displayBarChart(data);
                 displayXyChart(data);
+                listenOnSelects(data);
             });
     } catch (error) {
         console.error(error);
@@ -22,12 +23,35 @@
 
 /*
 * -----------------------------------------------------------------------------
+* SELECTS LISTENER
+* -----------------------------------------------------------------------------
+*/
+const listenOnSelects = (data) => {
+    const mapSelect = document.querySelector('.charts');
+    mapSelect.addEventListener('change', (e) => {
+        const select = e.target;
+        const value = select.value;
+        const id = select.getAttribute('id');
+
+        if (id === 'mapSelect') {
+            displayMapChart(data, value);
+        } else if (id === 'barSelect') {
+            displayBarChart(data, value);
+        } else if (id === 'xySelect') {
+            displayXyChart(data, value);
+        }
+
+    })
+};
+
+/*
+* -----------------------------------------------------------------------------
 * MAP CHART
 * -----------------------------------------------------------------------------
 */
 
 // FUNCTION - Prepare the data for the chart map
-const mapChartData = (data) => {
+const mapChartData = (data, selectValue) => {
     let formatedData = [];
     let obj = {};
 
@@ -36,10 +60,16 @@ const mapChartData = (data) => {
         let noc = line.NOC.slice(0, -1); // format NOC with 2 characters
         let medals = line.Medal;
 
-        if (medals !== 'NA') {
+        if (medals !== 'NA' && selectValue === 'All') {
             if (noc in obj) {
                 obj[noc]++;
             } else {
+                obj[noc] = 1;
+            }
+        } else if (medals !== 'NA' && selectValue !== 'All') {
+            if (noc in obj && medals === selectValue) {
+                obj[noc]++;
+            } else if (medals === selectValue) {
                 obj[noc] = 1;
             }
         }
@@ -59,8 +89,8 @@ const mapChartData = (data) => {
 };
 
 // FUNCTION - Display the map chart
-const displayMapChart = (data) => {
-    const formatedData = mapChartData(data);
+const displayMapChart = (data, selectValue = 'All') => {
+    const formatedData = mapChartData(data, selectValue);
 
     let chart = am4core.create("chartOne", am4maps.MapChart);
 
@@ -81,7 +111,7 @@ const displayMapChart = (data) => {
 
     // Configure series
     let polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = "{name}:{value}";
+    polygonTemplate.tooltipText = "{name}: {value}";
 
     // Remove Antarctica
     polygonSeries.exclude = ["AQ"];
@@ -104,7 +134,7 @@ const displayMapChart = (data) => {
 * -----------------------------------------------------------------------------
 */
 
-// FUNCTION - Prepare the data for the pie chart
+// FUNCTION - Prepare the data for the bar chart
 const barChartData = (data) => {
     let formatedData = [];
     let obj = {};
@@ -136,7 +166,7 @@ const barChartData = (data) => {
     return formatedData
 };
 
-// FUNCTION - Display the map chart
+// FUNCTION - Display the bar chart
 const displayBarChart = (data) => {
     const formatedData = barChartData(data);
 
@@ -173,19 +203,29 @@ const displayBarChart = (data) => {
 */
 
 // FUNCTION - Prepare the data for the xy chart
-const xyChartData = (data) => {
+const xyChartData = (data, selectValue) => {
     let formatedData = [];
     let obj = {};
 
     for (let i = 0; i < data.length; i++) {
         let line = data[i];
         let year = line.Year;
+        let sex = line.Sex;
 
-        if (year in obj) {
-            obj[year]++;
+        if (selectValue === 'All') {
+            if (year in obj) {
+                obj[year]++;
+            } else {
+                obj[year] = 1;
+            }
         } else {
-            obj[year] = 1;
+            if (year in obj && sex === selectValue) {
+                obj[year]++;
+            } else if (sex === selectValue) {
+                obj[year] = 1;
+            }
         }
+
     }
 
     for (key in obj) {
@@ -201,9 +241,9 @@ const xyChartData = (data) => {
     return formatedData
 };
 
-// FUNCTION - Display the map chart
-const displayXyChart = (data) => {
-    const formatedData = xyChartData(data);
+// FUNCTION - Display the xy chart
+const displayXyChart = (data, selectValue = 'All') => {
+    const formatedData = xyChartData(data, selectValue);
 
     am4core.useTheme(am4themes_animated);
 
@@ -233,3 +273,4 @@ const displayXyChart = (data) => {
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
 };
+

@@ -88,6 +88,10 @@ html {
     padding-bottom: 30px;
 }
 
+.element__select {
+    margin-bottom: 10px;
+}
+
 .element__chart {
     width: 100%;
     height: calc(100vh - 300px);
