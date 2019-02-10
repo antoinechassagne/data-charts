@@ -82,23 +82,25 @@ const displayMapChart = (data) => {
     // Configure series
     let polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}:{value}";
-    polygonTemplate.fill = am4core.color("#E8E8E8");
-
-    // Create hover state and set alternative fill color
-    let hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("blue");
 
     // Remove Antarctica
     polygonSeries.exclude = ["AQ"];
 
-
     // Add our medal data
     polygonSeries.data = formatedData;
+
+    // Fill color based on value
+    polygonSeries.heatRules.push({
+        "property": "fill",
+        "target": polygonSeries.mapPolygons.template,
+        "min": am4core.color("#FFFFFF"),
+        "max": am4core.color("#EBBD01")
+    });
 };
 
 /*
 * -----------------------------------------------------------------------------
-* PIE CHART
+* BAR CHART
 * -----------------------------------------------------------------------------
 */
 
@@ -146,10 +148,12 @@ const displayBarChart = (data) => {
     let chart = am4core.create("chartTwo", am4charts.XYChart3D);
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "category";
-    categoryAxis.title.text = "Âge";
     chart.data = formatedData;
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+    // Titles
     valueAxis.title.text = "Nombre d'athlètes";
+    categoryAxis.title.text = "Âge";
 
     // Create series
     let series = chart.series.push(new am4charts.ColumnSeries3D());
@@ -221,6 +225,10 @@ const displayXyChart = (data) => {
     series1.strokeWidth = 3;
     series1.tensionX = 0.8;
     series1.bullets.push(new am4charts.CircleBullet());
+
+    // Titles
+    valueAxis.title.text = "Nombre d'athlètes";
+    categoryAxis.title.text = "Années";
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
