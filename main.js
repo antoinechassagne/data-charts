@@ -4,7 +4,8 @@
 * -----------------------------------------------------------------------------
 */
 
-const retrieveData = () => {
+// IFFE for init (fetch -> data treatments -> chart display)
+{
     try {
         fetch('olympics.json')
             .then(response => response.json())
@@ -17,9 +18,7 @@ const retrieveData = () => {
         console.error(error);
         window.getElementByTagName.innerHTML = "<div class=\"fetch-error\">Erreur lors du chargement des données.</div>"
     }
-};
-
-retrieveData();
+}
 
 /*
 * -----------------------------------------------------------------------------
@@ -71,6 +70,9 @@ const displayMapChart = (data) => {
     // Set projection
     chart.projection = new am4maps.projections.Miller();
 
+    // Disable zoom with wheel
+    chart.chartContainer.wheelable = false;
+
     // Create map polygon series
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
 
@@ -88,6 +90,7 @@ const displayMapChart = (data) => {
 
     // Remove Antarctica
     polygonSeries.exclude = ["AQ"];
+
 
     // Add our medal data
     polygonSeries.data = formatedData;
@@ -108,11 +111,14 @@ const barChartData = (data) => {
         let line = data[i];
         let age = line.Age;
 
-        if (age in obj) {
-            obj[age]++;
-        } else {
-            obj[age] = 1;
+        if (age !== 'NA') {
+            if (age in obj) {
+                obj[age]++;
+            } else {
+                obj[age] = 1;
+            }
         }
+
     }
 
     for (key in obj) {
@@ -140,16 +146,16 @@ const displayBarChart = (data) => {
     let chart = am4core.create("chartTwo", am4charts.XYChart3D);
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "category";
-    categoryAxis.title.text = "Age";
+    categoryAxis.title.text = "Âge";
     chart.data = formatedData;
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.title.text = "Number of athletes";
+    valueAxis.title.text = "Nombre d'athlètes";
 
     // Create series
     let series = chart.series.push(new am4charts.ColumnSeries3D());
     series.dataFields.valueY = "valueY";
     series.dataFields.categoryX = "category";
-    series.name = "Age of the Olympics athletes";
+    series.name = "Âge des athlètes";
     series.tooltipText = "{Category}: [bold]{valueY}[/]";
 
     // Add cursor
