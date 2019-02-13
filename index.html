@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>Data chart athletes</title>
     <link rel="stylesheet" href="reset.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
+
 
 <section class="hero">
     <div class="container">
         <div class="wrapper">
-            <h1 class="hero__title">
-                Étude des athlètes participants aux Jeux Olympiques
-                entre 1896 et 2016
-            </h1>
+            <div class="left_colum">
+                <img class="hero__logo" src="olympics_logo.png" alt="Logo des Jeux Olympiques">
+                <h1 class="hero__title">
+                    Étude des athlètes participants aux <b> Jeux Olympiques</b>
+                    entre 1896 et 2016
+                </h1>
+            </div>
             <img class="hero__img" src="1896-OG.jpg" alt="Photo de la première édition des Jeux Olympiques de 1896">
         </div>
     </div>
@@ -24,42 +29,43 @@
 
 <section class="charts">
     <div class="container">
-        <div class="wrapper">
+        <div class="element">
+            <h2 class="element__title">
+                Nombre total de médailles olympiques remportées par pays participants
+            </h2>
+            <select class="element__select" id="mapSelect">
+                <option value="All">Toutes les médailles</option>
+                <option value="Gold">Or</option>
+                <option value="Silver">Argent</option>
+                <option value="Bronze">Bronze</option>
+            </select>
+            <div class="element__chart" id="chartOne"></div>
+        </div>
 
-            <div class="element">
-                <h2 class="element__title">
-                    Nombre total de médailles olympiques remportées par pays participants
-                </h2>
-                <select class="element__select" id="mapSelect">
-                    <option value="All">Toutes les médailles</option>
-                    <option value="Gold">Or</option>
-                    <option value="Silver">Argent</option>
-                    <option value="Bronze">Bronze</option>
-                </select>
-                <div class="element__chart" id="chartOne"></div>
-            </div>
+        <div class="element">
+            <h2 class="element__title">
+                Répartition du nombre d'athlètes en fonction du leur âge
+            </h2>
+            <div class="element__chart" id="chartTwo"></div>
+        </div>
 
-            <div class="element">
-                <h2 class="element__title">
-                    Répartition du nombre d'athlètes en fonction du leur âge
-                </h2>
-                <div class="element__chart" id="chartTwo"></div>
-            </div>
-
-            <div class="element">
-                <h2 class="element__title">
-                    Évolution du nombre total d'athlètes participants aux Jeux Olympiques
-                </h2>
-                <select class="element__select" id="xySelect">
-                    <option value="All">Tous</option>
-                    <option value="M">Masculin</option>
-                    <option value="F">Féminin</option>
-                </select>
-                <div class="element__chart" id="chartThree"></div>
-            </div>
+        <div class="element">
+            <h2 class="element__title">
+                Évolution du nombre total d'athlètes participants aux Jeux Olympiques
+            </h2>
+            <select class="element__select" id="xySelect">
+                <option value="All">Tous</option>
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+            </select>
+            <div class="element__chart" id="chartThree"></div>
         </div>
     </div>
 </section>
+
+<footer>
+    <span>Build with AMchart, coded in HTML, CSS and ES6 by Antoine Chassagne and Auguste Couecou</span>
+</footer>
 
 <script src="https://www.amcharts.com/lib/4/core.js"></script>
 <script src="https://www.amcharts.com/lib/4/maps.js"></script>
