@@ -210,7 +210,7 @@ const xyChartData = (data, selectValue) => {
     for (let i = 0; i < data.length; i++) {
         let line = data[i];
         let year = line.Year;
-        let sex = line.Sex;
+        let season = line.Season;
 
         if (selectValue === 'All') {
             if (year in obj) {
@@ -219,9 +219,9 @@ const xyChartData = (data, selectValue) => {
                 obj[year] = 1;
             }
         } else {
-            if (year in obj && sex === selectValue) {
+            if (year in obj && season === selectValue) {
                 obj[year]++;
-            } else if (sex === selectValue) {
+            } else if (season === selectValue) {
                 obj[year] = 1;
             }
         }
